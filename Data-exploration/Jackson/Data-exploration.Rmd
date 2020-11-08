@@ -1,0 +1,126 @@
+---
+title: "**CBA stock return exploration**"
+author: "Jackson Zhou"
+output:
+    html_document:
+        theme: united
+        highlight: kate
+---
+
+<style>
+body {text-align: justify}
+</style>
+
+## Introduction
+
+In this report, I will perform exploratory data analysis on daily Commonwealth Bank of Australia (CBA) stock return return prices from 03/01/2012 to 11/9/2020, as outlined in the assignment specifications.
+This will involve:
+
+- Plotting the prices and returns over time
+- Calculating summary statistics for the price and return time series
+
+## Importing packages
+
+I will import any packages which might be useful for the analysis.
+
+```{r Importing packages, message=FALSE, warning=FALSE}
+library(tidyverse)  # Data manipulation
+library(readxl)     # Load Excel files
+library(data.table) # Shift vectors
+library(e1071)      # Skewness and kurtosis functions
+```
+
+## Loading in and cleaning the data
+
+To start, I will load in the CBA stock price data from the relevant cell range in the provided Excel file.
+After this, I will generate the the time series for the returns, as specified by the following formula:
+$$y_t=\log\frac{P_t}{P_{t-1}}$$
+
+```{r Loading in and cleaning the data}
+stock.data <- read_excel("Price History_Commonwealth bank.xlsx", sheet = "Sheet 1", range = "A12:B2210") %>% 
+  rename("date" = "Exchange Date",
+         "price" = "Close") %>% 
+  mutate(return = round(log(price/shift(price, n = 1)), 5))
+```
+
+## Plotting the data
+
+### Plotting the stock prices
+
+Luckily, the `date` column has the correct data type, so I won't need to do any further work to get the plotting to work correctly.
+
+```{r Plotting the stock prices, fig.align="center", fig.width=10}
+stock.data %>% 
+  ggplot(mapping = aes(x = date, y = price)) +
+  geom_line(colour = "#303030") +
+  labs(title = "CBA stock prices over time",
+       x = "Date",
+       y = "CBA stock price") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+```
+
+Visualising the distribution of the stock prices using a histogram:
+
+```{r Distribution of stock prices, fig.align="center"}
+stock.data %>% 
+  ggplot(mapping = aes(x = price)) +
+  geom_histogram(bins = 30, colour = "black", fill = "#969696") +
+  labs(title = "Distribution of CBA stock prices",
+       x = "Stock price",
+       y = "Frequency") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+```
+
+
+### Plotting the stock returns
+
+Using similar code from the previous section:
+
+```{r Plotting the stock returns, fig.align="center", fig.width=10, warning=FALSE}
+stock.data %>% 
+  ggplot(mapping = aes(x = date, y = return)) +
+  geom_line(colour = "#303030") +
+  labs(title = "CBA stock returns over time",
+       x = "Date",
+       y = "CBA stock return") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+```
+
+Visualising the distribution of the stock returns using a histogram:
+
+```{r Distribution of stock returns, fig.align="center", warning=FALSE}
+stock.data %>% 
+  ggplot(mapping = aes(x = return)) +
+  geom_histogram(bins = 30, colour = "black", fill = "#969696") +
+  labs(title = "Distribution of CBA stock returns",
+       x = "Stock return",
+       y = "Frequency") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+```
+
+## Calculating the summary statistics
+
+Calculating basic summary statistics for the stock prices and returns:
+
+```{r Basic summary statistics}
+stock.data %>% 
+  select(all_of(c("price", "return"))) %>% 
+  summary()
+```
+
+Calculating skewness and kurtosis for the stock prices and returns:
+
+```{r Skewness and kurtosis}
+cat("For the CBA stock prices, the skewness is ", 
+    round(skewness(stock.data$price), 5), 
+    " and the kurtosis is ",
+    round(kurtosis(stock.data$price), 5), 
+    "\nFor the CBA stock returns, the skewness is ", 
+    round(skewness(stock.data$return, na.rm = TRUE), 5), 
+    " and the kurtosis is ",
+    round(kurtosis(stock.data$return, na.rm = TRUE), 5), sep = "")
+```
