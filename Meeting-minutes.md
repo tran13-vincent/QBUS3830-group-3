@@ -44,3 +44,29 @@
 ### Tasks to complete by next meeting
 
 - Have a go at figuring out how to approach the estimation of the posterior distribution (by 15/11/20)
+
+## Meeting 03 - Approaching the estimation of the posterior
+
+- **Date and time:** Sunday 15/11/20 7:00pm
+- **Attendees:** Everyone
+
+### Agenda
+
+- Check how everyone is going with trying to estimate the posterior
+- Get starting on planning out the report structure
+
+### Meeting notes
+
+- Best approach seems to be to pick the priors of the theta tildes empirically - normal distributions seemed to work quite well
+- After the prior was chosen, the posterior distribution was able to be easily derived
+- MCMC was able to be implemented with mostly no problems, so we now have our estimates for the GARCH model parameters
+- Predicting the volatility on the next day was easily done using the GARCH model parameter estiamtes
+- VB seems interesting, but it looks like we might not have time to attempt it
+- We should look online to check what what else we might need to put into the data exploration section
+
+### Tasks to complete by next meeting
+
+- Upload the prior experimentation and MCMC code onto Github (by 19/11/20)
+- Finish writing up the section on the MCMC implementation (by 19/11/20)
+- Finish writing up the section on data exploration (by 19/11/20)
+- Get started on the discussion section (by 19/11/20)

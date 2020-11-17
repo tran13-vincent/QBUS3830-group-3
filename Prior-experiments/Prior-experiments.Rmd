@@ -1,0 +1,144 @@
+---
+title: "**Checking for appropriate priors**"
+author: "Jackson Zhou"
+output:
+    html_document:
+        theme: united
+        highlight: kate
+---
+
+```{r Importing packages, message=FALSE, echo=FALSE}
+library(tidyverse)
+library(cowplot)
+```
+
+
+Our task is to choose the distributions of $\tilde{\theta}_1$ and $\tilde{\theta}_2$ such that:
+$$
+\alpha=\left(\frac{e^{\tilde{\theta}_1}}{e^{\tilde{\theta}_1}+1}\right)\left(\frac{e^{\tilde{\theta}_2}}{e^{\tilde{\theta}_2}+1}\right),\ \beta=\left(\frac{e^{\tilde{\theta}_1}}{e^{\tilde{\theta}_1}+1}\right)\left(\frac{1}{e^{\tilde{\theta}_2}+1}\right)
+$$
+
+are distributed reasonably close to $\text{Beta}(1.5,10)$ and $\text{Beta}(10,1.5)$ respectively.
+To help us out, we first visualise samples from these Beta distributions using a histogram:
+
+```{r Visualising Beta samples, fig.align="center"}
+set.seed(3830)
+ideal.alpha.sample <- rbeta(n = 10000, shape1 = 1.5, shape2 = 10)
+ideal.beta.sample <- rbeta(n = 10000, shape1 = 10, shape2 = 1.5)
+
+ideal.alpha.plot <- ideal.alpha.sample %>% 
+  data.frame() %>% 
+  ggplot(mapping = aes(x = .)) +
+  geom_histogram(bins = 30, colour = "black", fill = "#888888") +
+  labs(title = "Distribution of Beta(1.5,10) samples",
+       x = "Value",
+       y = "Frequency") +
+  ylim(c(0, 2000)) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+ideal.alpha.plot
+
+ideal.beta.plot <- ideal.beta.sample %>% 
+  data.frame() %>% 
+  ggplot(mapping = aes(x = .)) +
+  geom_histogram(bins = 30, colour = "black", fill = "#888888") +
+  labs(title = "Distribution of Beta(10,1.5) samples",
+       x = "Value",
+       y = "Frequency") +
+  ylim(c(0, 2000)) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+ideal.beta.plot
+```
+
+I will now generate appropriate samples of $\tilde{\theta}_1$ and $\tilde{\theta}_2$ (with their distributions chosen via guess-and-check), and visualise the corresponding distributions of:
+
+$$
+A=\frac{e^{\tilde{\theta}_1}}{e^{\tilde{\theta}_1}+1},\ B=\frac{e^{\tilde{\theta}_2}}{e^{\tilde{\theta}_2}+1},\ C=\frac{1}{e^{\tilde{\theta}_2}+1},\ \alpha=A\cdot B\ \text{ and }\ \beta=A\cdot C
+$$
+
+```{r Theta tilde samples, fig.align="center", warning=FALSE}
+set.seed(3830)
+theta.1.tilde.sample <- rnorm(n = 10000, mean = 8, sd = 1)
+theta.2.tilde.sample <- rnorm(n = 10000, mean = -2, sd = 1)
+A.sample <- exp(theta.1.tilde.sample)/(exp(theta.1.tilde.sample) + 1)
+B.sample <- exp(theta.2.tilde.sample)/(exp(theta.2.tilde.sample) + 1)
+C.sample <- 1/(exp(theta.2.tilde.sample) + 1)
+alpha.sample <- A.sample*B.sample
+beta.sample <- A.sample*C.sample
+
+A.plot <- A.sample %>% 
+  data.frame() %>% 
+  ggplot(mapping = aes(x = .)) +
+  geom_histogram(bins = 30, colour = "black", fill = "#888888") +
+  labs(title = "Distribution of samples for A",
+       x = "Value",
+       y = "Frequency") +
+  ylim(c(0, 2000)) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+A.plot
+
+B.plot <- B.sample %>% 
+  data.frame() %>% 
+  ggplot(mapping = aes(x = .)) +
+  geom_histogram(bins = 30, colour = "black", fill = "#888888") +
+  labs(title = "Distribution of samples for B",
+       x = "Value",
+       y = "Frequency") +
+  ylim(c(0, 2000)) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+B.plot
+
+C.plot <- C.sample %>% 
+  data.frame() %>% 
+  ggplot(mapping = aes(x = .)) +
+  geom_histogram(bins = 30, colour = "black", fill = "#888888") +
+  labs(title = "Distribution of samples for C",
+       x = "Value",
+       y = "Frequency") +
+  ylim(c(0, 2000)) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+C.plot
+
+alpha.plot <- alpha.sample %>% 
+  data.frame() %>% 
+  ggplot(mapping = aes(x = .)) +
+  geom_histogram(bins = 30, colour = "black", fill = "#888888") +
+  labs(title = "Distribution of samples for alpha",
+       x = "Value",
+       y = "Frequency") +
+  ylim(c(0, 2000)) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+alpha.plot
+
+beta.plot <- beta.sample %>% 
+  data.frame() %>% 
+  ggplot(mapping = aes(x = .)) +
+  geom_histogram(bins = 30, colour = "black", fill = "#888888") +
+  labs(title = "Distribution of samples for beta",
+       x = "Value",
+       y = "Frequency") +
+  ylim(c(0, 2000)) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1))
+beta.plot
+```
+
+We see that by choosing the priors of $\tilde{\theta}_1$ and $\tilde{\theta}_2$ to be $\mathcal{N}(8,1)$ and $\mathcal{N}(-2,1)$ respectively, the corresponding distributions of $\alpha$ and $\beta$ are reasonably close to the suggested priors.
+Checking that our samples of $\alpha$ and $\beta$ never sum to more than 1:
+
+```{r Checking the sums}
+sum((alpha.sample + beta.sample) > 1)
+```
+
+We see that none of the 10000 samples of $\alpha$ and $\beta$ generated using this method summed to more than 1, which is what we want.
+Making some grid plots for easier comparison:
+
+```{r Grid plots, fig.align="center", fig.width=10}
+plot_grid(ideal.alpha.plot, alpha.plot, nrow = 1)
+plot_grid(ideal.beta.plot, beta.plot, nrow = 1)
+```
