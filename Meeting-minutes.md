@@ -70,3 +70,40 @@
 - Finish writing up the section on the MCMC implementation (by 19/11/20)
 - Finish writing up the section on data exploration (by 19/11/20)
 - Get started on the discussion section (by 19/11/20)
+
+## Meeting 04 - Getting starting on the report
+
+- **Date and time:** Friday 20/11/20 7:00pm
+- **Attendees:** Everyone
+
+### Agenda
+
+- Get started on writing up the bulk of the report
+
+### Meeting notes
+
+- Started and edited the introduction
+- Edited parts of the EDA
+- Discussed what to the in discussion and results
+
+### Tasks to complete by next meeting
+
+- Finish writing up the dicussion and results sections
+
+## Meeting 05 - Finishing up writing the report
+
+- **Date and time:** Monday 23/11/20 7:30pm
+- **Attendees:** Everyone
+
+### Agenda
+
+- Make any final edits to the report and code
+
+### Meeting notes
+
+- Edited the code to include SD estimates for the original parameters and the trace plots for the original parameters
+- Put the tables and trace plots for the original parameters in the report
+
+### Tasks to complete by next meeting
+
+- Nothing of note
