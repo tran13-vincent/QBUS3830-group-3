@@ -1,5 +1,5 @@
-function val = log_likelihood(theta_tilde,return_data)
-    % Log likelihood function for the paramters of the reparameterised
+function val = Group_3_log_likelihood(theta_tilde,return_data)
+    % Log likelihood function for the parameters of the reparameterised
     % GARCH model, derived in the solutions.
     % theta_tilde - row or column vector of length 3
     % return_data - y_t's as defined in the solutions; column vector

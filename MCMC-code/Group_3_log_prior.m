@@ -1,4 +1,4 @@
-function val = log_prior(theta_tilde)
+function val = Group_3_log_prior(theta_tilde)
     % Log prior function for the parameters of the reparameterised
     % GARCH model, derived in the solutions.
     % theta_tilde - row or column vector of length 3
