@@ -88,7 +88,7 @@
 
 ### Tasks to complete by next meeting
 
-- Finish writing up the dicussion and results sections
+- Finish writing up the dicussion and results sections (by 23/11/20)
 
 ## Meeting 05 - Finishing up writing the report
 
